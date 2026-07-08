@@ -1,16 +1,18 @@
 import os
 import logging
-from telegram import Update
-from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
-
-# --- Text Analysis Engine (Built-in, no external API needed) ---
 import re
 import statistics
-from collections import Counter
-import textstat  # For readability formulas
+from telegram import Update
+from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
+import textstat
 
+# --- Setup Logging ---
+logging.basicConfig(level=logging.INFO)
+
+# --- Text Analysis Engine ---
 def analyze_readability(text: str):
     """Runs multiple readability formulas and identifies complex areas."""
+    
     # 1. Basic Stats
     word_count = len(text.split())
     sentence_count = len(re.findall(r'[.!?]+', text))
@@ -61,8 +63,6 @@ def analyze_readability(text: str):
     }
 
 # --- Telegram Bot Handlers ---
-logging.basicConfig(level=logging.INFO)
-
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "👋 Welcome to *HemingwayBot*!\n\n"
